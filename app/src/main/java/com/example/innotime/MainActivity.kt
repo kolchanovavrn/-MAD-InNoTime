@@ -4,8 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
-
+import com.example.innotime.db.TimerDao
+import com.example.innotime.db.TimerDbModel
+import com.example.innotime.db.TimerRoomDatabase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.launch
+import kotlin.coroutines.EmptyCoroutineContext
 
 class MainActivity : AppCompatActivity() {
     enum class TimerState{
@@ -14,6 +19,10 @@ class MainActivity : AppCompatActivity() {
         Paused,
         Stopped
     }
+
+    private var db: TimerRoomDatabase? = null
+    private var timerDao: TimerDao? = null
+
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
     private var seconds: Long = 60
@@ -22,6 +31,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        db = TimerRoomDatabase.getTimerDataBase(context = this)
+        timerDao = db?.timerDao()
+
+        CoroutineScope(EmptyCoroutineContext).launch{
+            timerDao?.insertTimer(TimerDbModel(0, "one", 60, "description"))
+        }
         timerState = TimerState.Initial
         updateButtons()
         start.setOnClickListener{v ->
