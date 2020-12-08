@@ -9,25 +9,36 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     enum class TimerState{
+        Initial,
         Running,
         Paused,
         Stopped
     }
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
+    private var seconds: Long = 60
     private var secondsRemaining: Long = 60
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        timerState = TimerState.Initial
+        updateButtons()
         start.setOnClickListener{v ->
-            startTimer()
-            timerState =  TimerState.Running
+            when(timerState) {
+                TimerState.Initial ->{
+                    startTimer(seconds)
+                }
+                TimerState.Stopped ->{
+                    startTimer(seconds)
+                }
+                else -> startTimer(secondsRemaining)
+            }
             updateButtons()
         }
 
         pause.setOnClickListener { v ->
-            timer.cancel()
+            pauseTimer()
             timerState = TimerState.Paused
             updateButtons()
         }
@@ -39,6 +50,11 @@ class MainActivity : AppCompatActivity() {
     }
     private fun updateButtons(){
         when (timerState) {
+            TimerState.Initial ->{
+                start.isEnabled = true
+                pause.isEnabled = false
+                stop.isEnabled = false
+            }
             TimerState.Running ->{
                 start.isEnabled = false
                 pause.isEnabled = true
@@ -56,8 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    override fun onPause() {
-        super.onPause()
+    private fun pauseTimer() {
         if (timerState == TimerState.Running){
             timer.cancel()
         }
@@ -69,10 +84,10 @@ class MainActivity : AppCompatActivity() {
         updateButtons()
     }
 
-    private fun startTimer(){
+    private fun startTimer(sec : Long){
         timerState = TimerState.Running
 
-        timer = object : CountDownTimer(secondsRemaining * 1000, 1000) {
+        timer = object : CountDownTimer(sec * 1000, 1000) {
             override fun onFinish() = onTimerFinished()
 
             override fun onTick(millisUntilFinished: Long) {
