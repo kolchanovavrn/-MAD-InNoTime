@@ -1,16 +1,11 @@
 package com.example.innotime
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
-import com.example.innotime.db.TimerDao
-import com.example.innotime.db.TimerDbModel
-import com.example.innotime.db.TimerRoomDatabase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.launch
-import kotlin.coroutines.EmptyCoroutineContext
 
 class MainActivity : AppCompatActivity() {
     enum class TimerState{
@@ -20,26 +15,26 @@ class MainActivity : AppCompatActivity() {
         Stopped
     }
 
-    private var db: TimerRoomDatabase? = null
-    private var timerDao: TimerDao? = null
 
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
-    private var seconds: Long = 60
-    private var secondsRemaining: Long = 60
+    private var seconds : Long = 0
+    private var secondsRemaining: Long = seconds
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        seconds = time?.text.toString().toLong()
 
-        db = TimerRoomDatabase.getTimerDataBase(context = this)
-        timerDao = db?.timerDao()
-
-        CoroutineScope(EmptyCoroutineContext).launch{
-            timerDao?.insertTimer(TimerDbModel(0, "one", 60, "description"))
-        }
         timerState = TimerState.Initial
         updateButtons()
+
+        add.setOnClickListener{
+            val intent = Intent()
+            intent.setClassName(this, "com.example.innotime.AddTimer")
+            startActivity(intent)
+        }
         start.setOnClickListener{v ->
             when(timerState) {
                 TimerState.Initial ->{
@@ -108,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTick(millisUntilFinished: Long) {
                 secondsRemaining = millisUntilFinished / 1000
-                time.text = ("$secondsRemaining")
+                time.text = "$secondsRemaining"
             }
         }.start()
     }

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [TimerDbModel::class], version = 1)
+@Database(entities = [TimerDbModel::class], version = 2)
 abstract class TimerRoomDatabase : RoomDatabase() {
 
     abstract fun timerDao(): TimerDao
@@ -20,7 +20,9 @@ abstract class TimerRoomDatabase : RoomDatabase() {
                         context.applicationContext,
                         TimerRoomDatabase::class.java,
                         "timers"
-                    ).build()
+                    )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 }
             }
             return INSTANCE

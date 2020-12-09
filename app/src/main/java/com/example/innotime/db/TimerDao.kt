@@ -17,4 +17,7 @@ interface TimerDao {
 
     @Delete
     fun deleteTimer(timerDbModel: TimerDbModel)
+
+    @Query("DELETE from timers_table")
+    fun dropTable();
 }
