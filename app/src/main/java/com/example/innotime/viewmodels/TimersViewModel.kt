@@ -19,12 +19,8 @@ class TimersViewModel
 
 
     init {
-        val timersDao = TimerRoomDatabase.getTimerDataBase(application, viewModelScope).timerDao()
+        val timersDao = TimerRoomDatabase.getTimerDataBase(application).timerDao()
         repository = TimerRepository(timersDao)
         allTimers = repository.allTimers
-    }
-
-    fun insert(timerDbModel: TimerDbModel) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insert(timerDbModel)
     }
 }

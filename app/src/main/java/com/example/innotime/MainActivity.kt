@@ -1,13 +1,10 @@
 package com.example.innotime
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.innotime.db.TimerDbModel
 import com.example.innotime.viewmodels.TimersViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -21,8 +18,6 @@ class MainActivity : AppCompatActivity() {
     }
     @Inject
     lateinit var timersViewModel: TimersViewModel
-
-    private val newAddTimerRequestCode = 1
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
     private var seconds : Long = 0
@@ -38,8 +33,9 @@ class MainActivity : AppCompatActivity() {
         updateButtons()
 
         add.setOnClickListener{
-            val intent = Intent(this@MainActivity, AddTimer::class.java)
-            startActivityForResult(intent, newAddTimerRequestCode)
+            val intent = Intent()
+            intent.setClassName(this, "com.example.innotime.AddTimer")
+            startActivity(intent)
         }
 
         list.setOnClickListener{
@@ -119,18 +115,5 @@ class MainActivity : AppCompatActivity() {
                 time.text = "$secondsRemaining"
             }
         }.start()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intentData)
-
-        if (requestCode == newAddTimerRequestCode && resultCode == Activity.RESULT_OK) {
-            intentData?.let { data ->
-                val time = data.getStringExtra(AddTimer.TIME)
-                val timer = TimerDbModel(0, data.getStringExtra(AddTimer.TITLE)!!, time!!.toLong(), "" )
-                timersViewModel.insert(timer)
-                Unit
-            }
-        }
     }
 }

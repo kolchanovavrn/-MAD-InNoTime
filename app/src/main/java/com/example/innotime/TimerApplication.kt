@@ -1,7 +1,6 @@
 package com.example.innotime
 
 import android.app.Application
-import com.example.innotime.DaggerApplicationComponent
 
 class TimerApplication : Application() {
 
