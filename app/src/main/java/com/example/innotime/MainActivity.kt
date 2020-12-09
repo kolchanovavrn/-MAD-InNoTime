@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
+import com.example.innotime.viewmodels.TimersViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     enum class TimerState{
@@ -14,8 +16,8 @@ class MainActivity : AppCompatActivity() {
         Paused,
         Stopped
     }
-
-
+    @Inject
+    lateinit var timersViewModel: TimersViewModel
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
     private var seconds : Long = 0
@@ -35,6 +37,13 @@ class MainActivity : AppCompatActivity() {
             intent.setClassName(this, "com.example.innotime.AddTimer")
             startActivity(intent)
         }
+
+        list.setOnClickListener{
+            val intent = Intent()
+            intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
+            startActivity(intent)
+        }
+
         start.setOnClickListener{v ->
             when(timerState) {
                 TimerState.Initial ->{

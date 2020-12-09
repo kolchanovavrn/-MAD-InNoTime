@@ -16,7 +16,6 @@ class AddTimer : AppCompatActivity() {
         var db: TimerRoomDatabase?
         var timerDao: TimerDao?
 
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_timer)
 
@@ -35,7 +34,5 @@ class AddTimer : AppCompatActivity() {
                 Toast.makeText(this, "Fill label and time", Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 }

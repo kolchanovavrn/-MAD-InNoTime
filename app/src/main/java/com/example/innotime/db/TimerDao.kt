@@ -1,13 +1,13 @@
 package com.example.innotime.db
 
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface TimerDao {
 
     @Query("SELECT * from timers_table ORDER BY id ASC")
-    fun getTimers(): List<TimerDbModel>
+    fun getTimers(): LiveData<List<TimerDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertTimer(timerDbModel: TimerDbModel)
@@ -19,5 +19,5 @@ interface TimerDao {
     fun deleteTimer(timerDbModel: TimerDbModel)
 
     @Query("DELETE from timers_table")
-    fun dropTable();
+    fun deleteAll();
 }
