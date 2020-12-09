@@ -8,7 +8,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.InNoTime">
+        android:theme="@style/Theme.InNoTime"
+        android:name=".TimerApplication">
+
+        <activity android:name=".ListOfTimers" />
         <activity android:name=".AddTimer" />
         <activity android:name=".MainActivity">
             <intent-filter>
