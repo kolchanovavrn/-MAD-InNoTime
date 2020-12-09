@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">InNoTime</string>
     <string name="time">60</string>
+    <string name="create">create</string>
+    <string name="back">back</string>
+    <string name="title">Enter label</string>
 </resources>

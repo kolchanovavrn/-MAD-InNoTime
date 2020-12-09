@@ -1,10 +1,10 @@
 package com.example.innotime
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,16 +14,27 @@ class MainActivity : AppCompatActivity() {
         Paused,
         Stopped
     }
+
+
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
-    private var seconds: Long = 60
-    private var secondsRemaining: Long = 60
+    private var seconds : Long = 0
+    private var secondsRemaining: Long = seconds
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        seconds = time?.text.toString().toLong()
+
         timerState = TimerState.Initial
         updateButtons()
+
+        add.setOnClickListener{
+            val intent = Intent()
+            intent.setClassName(this, "com.example.innotime.AddTimer")
+            startActivity(intent)
+        }
         start.setOnClickListener{v ->
             when(timerState) {
                 TimerState.Initial ->{
@@ -92,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTick(millisUntilFinished: Long) {
                 secondsRemaining = millisUntilFinished / 1000
-                time.text = ("$secondsRemaining")
+                time.text = "$secondsRemaining"
             }
         }.start()
     }
