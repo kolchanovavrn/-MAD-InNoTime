@@ -7,6 +7,9 @@ class TimerRepository(private val timerDao: TimerDao) {
 
     val allTimers: LiveData<List<TimerDbModel>> = timerDao.getTimers()
 
+    // TODO: Remove hardcoded ID of the timer
+    val getTimer: LiveData<TimerDbModel> = timerDao.getTimer(1)
+
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insert(timerDbModel: TimerDbModel) {
