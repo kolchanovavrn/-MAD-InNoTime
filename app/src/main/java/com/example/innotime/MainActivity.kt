@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.innotime.viewmodels.TimersViewModel
@@ -29,6 +30,18 @@ class MainActivity : AppCompatActivity() {
         (application as TimerApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val appContext = applicationContext as TimerApplication
+        
+        if (appContext.currentTimerState == null){
+            Toast.makeText(applicationContext, "No timer was set!", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
+        seconds = appContext.currentTimerState!!.remainingTime
+
+
+//        applicationContext.
 
         timerState = TimerState.Initial
         updateButtons()
@@ -113,6 +126,8 @@ class MainActivity : AppCompatActivity() {
         timerState = TimerState.Stopped
         time.text = "Done!"
         updateButtons()
+
+
     }
 
     private fun startTimer(sec : Long){
