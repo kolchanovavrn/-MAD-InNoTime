@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.innotime.viewmodels.TimersViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -20,28 +21,38 @@ class MainActivity : AppCompatActivity() {
     lateinit var timersViewModel: TimersViewModel
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Stopped
-    private var seconds : Long = 0
+    private var seconds : Long = 60
     private var secondsRemaining: Long = seconds
 
-
+//  TODO: Add DB initialization in Main Activity
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as TimerApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        seconds = time?.text.toString().toLong()
 
         timerState = TimerState.Initial
         updateButtons()
+
+        delete.setOnClickListener{
+            timersViewModel.getTimer.observe(this, Observer { list ->
+// TODO: Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
+//                timerDao.deleteTimer(list)
+                println(list)
+            })
+        }
 
         add.setOnClickListener{
             val intent = Intent()
             intent.setClassName(this, "com.example.innotime.AddTimer")
             startActivity(intent)
+            this.finish()
         }
 
         list.setOnClickListener{
             val intent = Intent()
             intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
             startActivity(intent)
+            this.finish()
         }
 
         start.setOnClickListener{v ->
