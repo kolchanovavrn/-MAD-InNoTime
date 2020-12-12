@@ -41,8 +41,8 @@ class SequentialTimerInfo(
         }
         timers.forEach {
             val transitionsIds = HashSet<Int>();
-            Log.e("DBG", it.transitions.toString())
-            println(it.transitions.toString())
+//            Log.e("DBG", it.transitions.toString())
+//            println(it.transitions.toString())
             it.transitions.forEach {
 
                 if (!timersIds.contains(it.to)) {
