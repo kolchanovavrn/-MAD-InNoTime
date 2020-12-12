@@ -26,7 +26,7 @@ class TimersListAdapter internal constructor(
 
     override fun onBindViewHolder(holder: TimersViewHolder, position: Int) {
         val current = timers[position]
-        holder.timersItemView.text = current.name
+//        holder.timersItemView.text = current.name
     }
 
     internal fun setTimers(words: List<TimerDbModel>) {

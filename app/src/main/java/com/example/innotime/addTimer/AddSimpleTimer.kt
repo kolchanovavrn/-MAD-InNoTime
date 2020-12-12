@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.innotime.R
+import com.example.innotime.db.TimerDbModel
+import com.example.innotime.db.TimerRoomDatabase
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_add_simple_timer.*
 
 class AddSimpleTimer : Fragment() {
@@ -26,7 +29,14 @@ class AddSimpleTimer : Fragment() {
         back.setOnClickListener { goToMainPage() }
 
         create.setOnClickListener {
-            Toast.makeText(activity, "Need to save somewhere", Toast.LENGTH_LONG).show()
+//            Toast.makeText(activity, "Need to save somewhere", Toast.LENGTH_LONG).show()
+            val timersDao = TimerRoomDatabase.getTimerDataBase(activity!!.application).timerDao()
+
+            val gson = Gson()
+//            gson.toJson()
+
+//            timersDao.insertTimer(TimerDbModel(0, ))
+
         }
     }
 
