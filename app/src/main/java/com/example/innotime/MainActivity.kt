@@ -16,38 +16,22 @@ class MainActivity : AppCompatActivity() {
         Initial,
         Running,
         Paused,
-        Stopped
+        Stopped,
+        Transition
     }
     @Inject
     lateinit var timersViewModel: TimersViewModel
     private lateinit var timer: CountDownTimer
-    private var timerState = TimerState.Stopped
+    private var timerState = TimerState.Initial
     private var seconds : Long = 60
     private var secondsRemaining: Long = seconds
+    private var pauseNext: Boolean = true
 
 //  TODO: Add DB initialization in Main Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as TimerApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val appContext = applicationContext as TimerApplication
-        
-        if (appContext.currentTimerState == null){
-            Toast.makeText(applicationContext, "No timer was set!", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-
-        seconds = appContext.currentTimerState!!.remainingTime
-        secondsRemaining = seconds
-
-        startTimer(seconds)
-        updateButtons()
-        label.setText(appContext.currentTimerState!!.timer.name)
-
-
-        timerState = TimerState.Initial
-        updateButtons()
 
         delete.setOnClickListener{
             timersViewModel.getTimer.observe(this, Observer { list ->
@@ -61,13 +45,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent()
             intent.setClassName(this, "com.example.innotime.addTimer.AddTimerActivity")
             startActivity(intent)
+//            this.finish()
         }
 
         list.setOnClickListener{
             val intent = Intent()
             intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
             startActivity(intent)
-            this.finish()
+//            this.finish()
         }
 
         start.setOnClickListener{v ->
@@ -76,7 +61,9 @@ class MainActivity : AppCompatActivity() {
                     startTimer(seconds)
                 }
                 TimerState.Stopped ->{
-                    startTimer(seconds)
+
+                    updateFromRunningTimer(reset = true)
+//                    startTimer(seconds)
                 }
                 else -> startTimer(secondsRemaining)
             }
@@ -118,6 +105,52 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (timerState == TimerState.Stopped){
+            return
+        }
+
+        if (timerState == TimerState.Transition || timerState == TimerState.Initial){
+            updateFromRunningTimer()
+        }
+    }
+
+    private fun updateFromRunningTimer(reset : Boolean = false){
+        val appContext = applicationContext as TimerApplication
+
+        if (appContext.currentTimerState == null){
+            Toast.makeText(applicationContext, "No timer was set!", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
+        if (reset){
+            appContext.currentTimerState!!.reset()
+        }
+
+        seconds = appContext.currentTimerState!!.remainingTime
+        secondsRemaining = seconds
+
+        updateButtons()
+        label.setText(appContext.currentTimerState!!.timer.name + " : " + appContext.currentTimerState!!.getCurrentSingleTimer().name)
+
+
+        if (pauseNext){
+            time.text = "$secondsRemaining"
+            timerState = TimerState.Paused
+            pauseNext = false
+
+        } else {
+            timerState = TimerState.Running
+            startTimer(seconds)
+
+        }
+
+
+    }
+
     private fun pauseTimer() {
         if (timerState == TimerState.Running){
             timer.cancel()
@@ -131,17 +164,21 @@ class MainActivity : AppCompatActivity() {
         val appContext = applicationContext as TimerApplication
 
         if (appContext.currentTimerState!!.getTransitions().size != 0){
-            if (appContext.currentTimerState!!.getEndTransition() != null){
-                val endTransition = appContext.currentTimerState!!.getEndTransition()!!
+            if (appContext.currentTimerState!!.getTransitions().size == 1 && appContext.currentTimerState!!.getTransitions()[0].type == 1){
+                val endTransition = appContext.currentTimerState!!.getTransitions()[0]
                 appContext.currentTimerState!!.makeTransition(endTransition)
 
-                seconds = appContext.currentTimerState!!.remainingTime
-                secondsRemaining = seconds
+                updateFromRunningTimer()
+
+//                startTimer(seconds)
 
             } else {
                 val intent = Intent()
                 intent.setClassName(this@MainActivity, "com.example.innotime.TimerActions")
+                timerState = TimerState.Transition
+
                 startActivity(intent)
+
 //                this.finish()
             }
         } else {
@@ -152,6 +189,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startTimer(sec : Long){
+
         timerState = TimerState.Running
 
         timer = object : CountDownTimer(sec * 1000, 1000) {

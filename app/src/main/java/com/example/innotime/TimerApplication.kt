@@ -29,70 +29,64 @@ fun getTestTimer() : SequentialTimerInfo {
             "timers" : [
                 {
                     "id" : 0,
+                    "name" : "first",
                     "durationInSecs" : 5,
                     "description" : "555",
                     "transitions" : [
                         {
-                        "transitionID" : 0,
                         "to" : 1,
-                        "type" : 0,
+                        "type" : 1,
                         "buttonText" : "This one should be invisible"
                         }
-                    ],
-                    "endTransition" : 0
+                    ]
                 },
                 {
                     "id" : 1,
+                    "name" : "second",
                     "durationInSecs" : 7,
                     "description" : "777",
                     "transitions" : [
                         {
-                        "transitionID" : 0,
                         "to" : 0,
                         "type" : 0,
                         "buttonText" : "Wanna go back?"
                         },
                         {
-                        "transitionID" : 1,
                         "to" : 1,
                         "type" : 0,
                         "buttonText" : "Recursion?"
                         },
                         {
-                        "transitionID" : 2,
                         "to" : 2,
                         "type" : 0,
                         "buttonText" : "Go to next"
                         },
                         {
-                        "transitionID" : 3,
                         "to" : 3,
                         "type" : 0,
                         "buttonText" : "Skip next"
                         }
-                    ],
-                    "endTransition" : null
+                    ]
                 },
                 {
                     "id" : 2,
+                    "name" : "third",
                     "durationInSecs" : 10,
                     "description" : "1010",
                     "transitions" : [
                         {
-                        "transitionID" : 0,
                         "to" : 3,
                         "type" : 0,
                         "buttonText" : "Go?"
                         }
-                    ],
-                    "endTransition" : null
+                    ]
                 },
                 {
                     "id" : 3,
+                    "name" : "fourth (last)",
                     "durationInSecs" : 5,
                     "description" : "The last one",
-                    "transitions" : [],
-                    "endTransition" : null
+                    "transitions" : []
                 }
             ]
         }

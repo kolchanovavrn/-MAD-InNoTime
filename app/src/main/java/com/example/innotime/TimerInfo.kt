@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName
 
 
 class SequentialTimerTransitionInfo(
-    @SerializedName("transitionID") val transitionID: Int,
     @SerializedName("to") val to: Int,
     @SerializedName("type") val type: Int,
     @SerializedName("buttonText") val buttonText: String,
@@ -14,9 +13,9 @@ class SequentialTimerTransitionInfo(
 class SequentialSingleTimerInfo(
     @SerializedName("id") val id: Int,
     @SerializedName("durationInSecs") val durationInSecs: Int,
+    @SerializedName("name") val name: String,
     @SerializedName("description") val description: String,
-    @SerializedName("transitions") val transitions: Array<SequentialTimerTransitionInfo>,
-    @SerializedName("endTransition") val endTransition: Int?
+    @SerializedName("transitions") val transitions: Array<SequentialTimerTransitionInfo>
 )
 
 /**
@@ -45,17 +44,10 @@ class SequentialTimerInfo(
             Log.e("DBG", it.transitions.toString())
             println(it.transitions.toString())
             it.transitions.forEach {
-                if (transitionsIds.contains(it.transitionID)) {
-                    return false
-                }
-                transitionsIds.add(it.transitionID)
 
                 if (!timersIds.contains(it.to)) {
                     return false
                 }
-            }
-            if (it.endTransition != null && !transitionsIds.contains(it.endTransition)) {
-                return false
             }
         }
         return true
@@ -81,24 +73,33 @@ class RunningTimerState(
         timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong()
     )
 
+    fun reset(){
+        currentTimerID = timer.startingTimer
+        remainingTime = timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong()
+    }
+
     fun getTransitions(): Array<SequentialTimerTransitionInfo> {
         val singleTimer = timer.getSingleTimer(currentTimerID)
         return singleTimer?.transitions ?: emptyArray()
     }
 
-    fun getEndTransition(): SequentialTimerTransitionInfo? {
-        val singleTimer = timer.getSingleTimer(currentTimerID)!!
-
-        if (singleTimer.endTransition == null)
-            return null
-        else {
-            getTransitions().forEach{
-                if (it.transitionID == singleTimer.endTransition)
-                    return it
-            }
-        }
-        return null
+    fun getCurrentSingleTimer() : SequentialSingleTimerInfo{
+        return timer.getSingleTimer(currentTimerID)!!
     }
+
+//    fun getEndTransition(): SequentialTimerTransitionInfo? {
+//        val singleTimer = timer.getSingleTimer(currentTimerID)!!
+//
+//        if (singleTimer.endTransition == null)
+//            return null
+//        else {
+//            getTransitions().forEach{
+//                if (it.transitionID == singleTimer.endTransition)
+//                    return it
+//            }
+//        }
+//        return null
+//    }
 
     fun makeTransition(transition: SequentialTimerTransitionInfo) {
         currentTimerID = transition.to
