@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".addTimer.AddSimpleTimer">
 
     <EditText
         android:id="@+id/time"
@@ -23,11 +23,10 @@
         android:layout_height="wrap_content"
         android:text="@string/back"
         android:gravity="center"
-        android:clickable="true"
         app:layout_constraintEnd_toStartOf="@+id/time"
         app:layout_constraintStart_toStartOf="@+id/progress"
         app:layout_constraintTop_toBottomOf="@+id/progress"
-         />
+        />
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -36,11 +35,10 @@
         android:layout_height="wrap_content"
         android:text="@string/create"
         android:gravity="center"
-        android:clickable="true"
         app:layout_constraintEnd_toEndOf="@+id/progress"
         app:layout_constraintStart_toEndOf="@+id/time"
         app:layout_constraintTop_toBottomOf="@+id/progress"
-         />
+        />
 
     <ProgressBar
         android:id="@+id/progress"

@@ -4,4 +4,16 @@
     <string name="create">create</string>
     <string name="back">back</string>
     <string name="title">Enter label</string>
+    <string name="simple">Simple</string>
+    <string name="sequential">Sequential</string>
+    <string name="type">Select type of the timer</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="next">Next</string>
+    <string name="alert">Fill all the fields</string>
+    <string name="cancel">Cancel</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

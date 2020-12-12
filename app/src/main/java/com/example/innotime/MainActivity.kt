@@ -59,9 +59,8 @@ class MainActivity : AppCompatActivity() {
 
         add.setOnClickListener{
             val intent = Intent()
-            intent.setClassName(this, "com.example.innotime.AddTimer")
+            intent.setClassName(this, "com.example.innotime.addTimer.AddTimerActivity")
             startActivity(intent)
-            this.finish()
         }
 
         list.setOnClickListener{

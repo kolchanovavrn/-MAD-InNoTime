@@ -6,8 +6,6 @@ import dagger.Component
 interface ApplicationComponent {
 
     fun inject(activity: MainActivity)
-
-    fun inject(activity: AddTimer)
-
+    
     fun inject(activity: ListOfTimers)
 }

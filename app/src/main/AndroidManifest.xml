@@ -12,7 +12,7 @@
         android:theme="@style/Theme.InNoTime">
         <activity android:name=".TimerActions"></activity>
         <activity android:name=".ListOfTimers" />
-        <activity android:name=".AddTimer" />
+        <activity android:name=".addTimer.AddTimerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
