@@ -1,5 +1,6 @@
 package com.example.innotime
 
+import android.util.Log
 import com.google.gson.annotations.SerializedName
 
 
@@ -14,7 +15,7 @@ class SequentialSingleTimerInfo(
     @SerializedName("id") val id: Int,
     @SerializedName("durationInSecs") val durationInSecs: Int,
     @SerializedName("description") val description: String,
-    @SerializedName("transitions") val transitions: List<SequentialTimerTransitionInfo>,
+    @SerializedName("transitions") val transitions: Array<SequentialTimerTransitionInfo>,
     @SerializedName("endTransition") val endTransition: Int?
 )
 
@@ -41,6 +42,8 @@ class SequentialTimerInfo(
         }
         timers.forEach {
             val transitionsIds = HashSet<Int>();
+            Log.e("DBG", it.transitions.toString())
+            println(it.transitions.toString())
             it.transitions.forEach {
                 if (transitionsIds.contains(it.transitionID)) {
                     return false
@@ -78,9 +81,23 @@ class RunningTimerState(
         timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong()
     )
 
-    fun getTransitions(): List<SequentialTimerTransitionInfo> {
+    fun getTransitions(): Array<SequentialTimerTransitionInfo> {
         val singleTimer = timer.getSingleTimer(currentTimerID)
-        return singleTimer?.transitions ?: ArrayList()
+        return singleTimer?.transitions ?: emptyArray()
+    }
+
+    fun getEndTransition(): SequentialTimerTransitionInfo? {
+        val singleTimer = timer.getSingleTimer(currentTimerID)!!
+
+        if (singleTimer.endTransition == null)
+            return null
+        else {
+            getTransitions().forEach{
+                if (it.transitionID == singleTimer.endTransition)
+                    return it
+            }
+        }
+        return null
     }
 
     fun makeTransition(transition: SequentialTimerTransitionInfo) {

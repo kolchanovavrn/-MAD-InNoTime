@@ -20,7 +20,7 @@ class TimerActions : AppCompatActivity() {
             newButton.setText(trans.buttonText)
             newButton.setOnClickListener {
                 appContext.currentTimerState!!.makeTransition(trans)
-
+                finish()
             }
             timerActionButtons.addView(newButton)
         }

@@ -39,9 +39,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         seconds = appContext.currentTimerState!!.remainingTime
+        secondsRemaining = seconds
 
+        startTimer(seconds)
+        updateButtons()
+        label.setText(appContext.currentTimerState!!.timer.name)
 
-//        applicationContext.
 
         timerState = TimerState.Initial
         updateButtons()
@@ -123,11 +126,30 @@ class MainActivity : AppCompatActivity() {
     }
     @SuppressLint("SetTextI18n")
     private fun onTimerFinished(){
-        timerState = TimerState.Stopped
-        time.text = "Done!"
-        updateButtons()
 
+        // if there are some transitions, go to TimerActions
 
+        val appContext = applicationContext as TimerApplication
+
+        if (appContext.currentTimerState!!.getTransitions().size != 0){
+            if (appContext.currentTimerState!!.getEndTransition() != null){
+                val endTransition = appContext.currentTimerState!!.getEndTransition()!!
+                appContext.currentTimerState!!.makeTransition(endTransition)
+
+                seconds = appContext.currentTimerState!!.remainingTime
+                secondsRemaining = seconds
+
+            } else {
+                val intent = Intent()
+                intent.setClassName(this@MainActivity, "com.example.innotime.TimerActions")
+                startActivity(intent)
+//                this.finish()
+            }
+        } else {
+            timerState = TimerState.Stopped
+            time.text = "Done!"
+            updateButtons()
+        }
     }
 
     private fun startTimer(sec : Long){
