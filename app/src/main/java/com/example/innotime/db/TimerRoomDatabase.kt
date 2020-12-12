@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
-@Database(entities = [TimerDbModel::class], version = 2)
+@Database(entities = [TimerDbModel::class], version = 3)
 abstract class TimerRoomDatabase : RoomDatabase() {
 
     abstract fun timerDao(): TimerDao
