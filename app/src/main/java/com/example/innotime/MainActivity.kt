@@ -9,17 +9,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.innotime.db.TimerDbModel
 import com.example.innotime.db.TimerRoomDatabase
+import com.example.innotime.api.Client
+import com.example.innotime.api.Timer
 import com.example.innotime.viewmodels.TimersViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 class MainActivity : AppCompatActivity() {
-    enum class TimerState {
+    lateinit var client: Client
+
+    enum class TimerState{
         Initial,
         Running,
         Paused,
@@ -35,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     private var secondsRemaining: Long = seconds
     private var pauseNext: Boolean = true
 
-    //  TODO: Add DB initialization in Main Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as TimerApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
@@ -84,7 +90,27 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        delete.setOnClickListener {
+        client = Client()
+        client.timerService.getTimerById(1)
+            .enqueue(object : Callback<Timer> {
+                override fun onFailure(call: Call<Timer>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error!", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onResponse(call: Call<Timer>, response: Response<Timer>) {
+                    if (response.body() === null) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No such timer",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                       println(response.body())
+                    }
+                }
+            })
+
+    delete.setOnClickListener{
             timersViewModel.getTimer.observe(this, Observer { list ->
 // TODO: Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
 //                timerDao.deleteTimer(list)

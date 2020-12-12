@@ -28,6 +28,9 @@ class AddSimpleTimer : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         back.setOnClickListener { goToMainPage() }
 
+//        GET NAME && DESCRIPTION
+//        mSettings?.getString(APP_PREFERENCES_NAME, "")
+//        mSettings?.getString(APP_PREFERENCES_DESCRIPTION, "")
         create.setOnClickListener {
 //            Toast.makeText(activity, "Need to save somewhere", Toast.LENGTH_LONG).show()
             val timersDao = TimerRoomDatabase.getTimerDataBase(activity!!.application).timerDao()

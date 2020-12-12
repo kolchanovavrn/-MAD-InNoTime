@@ -42,6 +42,11 @@ class AddTimerMainPage : Fragment() {
     }
 
     private fun addSimpleTimer() {
+        val editor = mSettings!!.edit()
+        editor.putString(APP_PREFERENCES_NAME, name.text.toString())
+        editor.putString(APP_PREFERENCES_DESCRIPTION, description.text.toString())
+        editor.apply()
+
         (requireActivity() as AddTimerActivity).navigateToAddSimpleTimer()
     }
 
