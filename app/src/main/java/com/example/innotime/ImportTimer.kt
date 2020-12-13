@@ -23,26 +23,8 @@ class ImportTimer : AppCompatActivity() {
 
         create.setOnClickListener {
             val url = url.text.toString()
-            client = Client()
-//            client.timerService.getTimerById(id)
-//                .enqueue(object : Callback<Timer> {
-//                    override fun onFailure(call: Call<Timer>, t: Throwable) {
-//                        Toast.makeText(this@ImportTimer, "Error!", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onResponse(call: Call<Timer>, response: Response<Timer>) {
-//                        if (response.body() === null) {
-//                            Toast.makeText(
-//                                this@ImportTimer,
-//                                "No such timer",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        } else {
-//                            println(response.body())
-//                        }
-//                    }
-//                })
-            client.timerService.getTimerByUrl(url)
+            client = Client(url)
+            client.timerService.getTimerByUrl()
                 .enqueue(object : Callback<Timer> {
                     override fun onFailure(call: Call<Timer>, t: Throwable) {
                         Toast.makeText(this@ImportTimer, "Error!", Toast.LENGTH_SHORT).show()
@@ -61,6 +43,5 @@ class ImportTimer : AppCompatActivity() {
                     }
                 })
         }
-
     }
 }
