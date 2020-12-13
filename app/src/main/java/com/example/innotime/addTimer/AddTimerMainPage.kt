@@ -27,9 +27,16 @@ class AddTimerMainPage : Fragment() {
             (requireActivity() as AddTimerActivity).finish() }
 
         nextStep.setOnClickListener {
+
             if (name.text.isEmpty() || description.text.isEmpty()) {
                 Toast.makeText(activity, R.string.alert, Toast.LENGTH_LONG).show()
             } else {
+
+                val editor = mSettings!!.edit()
+                editor.putString(APP_PREFERENCES_NAME, name.text.toString())
+                editor.putString(APP_PREFERENCES_DESCRIPTION, description.text.toString())
+                editor.apply()
+
                 if (type.isChecked){
                     addSequentialTimer()
                 }
@@ -42,11 +49,6 @@ class AddTimerMainPage : Fragment() {
     }
 
     private fun addSimpleTimer() {
-        val editor = mSettings!!.edit()
-        editor.putString(APP_PREFERENCES_NAME, name.text.toString())
-        editor.putString(APP_PREFERENCES_DESCRIPTION, description.text.toString())
-        editor.apply()
-
         (requireActivity() as AddTimerActivity).navigateToAddSimpleTimer()
     }
 

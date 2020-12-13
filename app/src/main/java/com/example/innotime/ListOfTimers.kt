@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.innotime.adapters.TimerInfoItemAdapter
+import com.example.innotime.adapters.TimerInfoListAdapter
 import com.example.innotime.db.TimerRoomDatabase
 import com.example.innotime.viewmodels.TimersViewModel
 import kotlinx.android.synthetic.main.activity_list_of_timers.*
@@ -27,7 +27,7 @@ class ListOfTimers : AppCompatActivity() {
         setContentView(R.layout.activity_list_of_timers)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = TimerInfoItemAdapter(timersDao)
+        val adapter = TimerInfoListAdapter(timersDao, application!! as TimerApplication, this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 

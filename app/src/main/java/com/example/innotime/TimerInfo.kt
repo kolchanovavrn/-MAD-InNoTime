@@ -64,18 +64,21 @@ class SequentialTimerInfo(
 class RunningTimerState(
     val timer: SequentialTimerInfo,
     var currentTimerID: Int,
-    var remainingTime: Long
+    var remainingTime: Long,
+    var finished: Boolean
 ) {
 
     constructor(timer: SequentialTimerInfo) : this(
         timer,
         timer.startingTimer,
-        timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong()
+        timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong(),
+        finished=false
     )
 
     fun reset(){
         currentTimerID = timer.startingTimer
         remainingTime = timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong()
+        finished = false
     }
 
     fun getTransitions(): Array<SequentialTimerTransitionInfo> {
