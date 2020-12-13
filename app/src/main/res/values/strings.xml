@@ -12,8 +12,9 @@
     <string name="next">Next</string>
     <string name="alert">Fill all the fields</string>
     <string name="cancel">Cancel</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="importTimer">Import</string>
+    <string name="url">Enter url</string>
+    <string name="add">Add</string>
 
 
 </resources>

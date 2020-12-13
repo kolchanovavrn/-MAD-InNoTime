@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InNoTime">
-        <activity android:name=".TimerActions"></activity>
+        <activity android:name=".ImportTimer"/>
+        <activity android:name=".TimerActions"/>
         <activity android:name=".ListOfTimers" />
         <activity android:name=".addTimer.AddTimerActivity" />
         <activity android:name=".MainActivity">

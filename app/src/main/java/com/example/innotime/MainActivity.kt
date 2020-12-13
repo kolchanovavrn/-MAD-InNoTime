@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.innotime.db.TimerDbModel
 import com.example.innotime.db.TimerRoomDatabase
-import com.example.innotime.api.Client
 import com.example.innotime.api.Timer
 import com.example.innotime.viewmodels.TimersViewModel
 import com.google.gson.Gson
@@ -24,7 +23,6 @@ import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
 class MainActivity : AppCompatActivity() {
-    lateinit var client: Client
 
     enum class TimerState{
         Initial,
@@ -90,42 +88,23 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        client = Client()
-        client.timerService.getTimerById(1)
-            .enqueue(object : Callback<Timer> {
-                override fun onFailure(call: Call<Timer>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error!", Toast.LENGTH_SHORT).show()
-                }
 
-                override fun onResponse(call: Call<Timer>, response: Response<Timer>) {
-                    if (response.body() === null) {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "No such timer",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                       println(response.body())
-                    }
-                }
-            })
+//    delete.setOnClickListener{
+//            timersViewModel.getTimer.observe(this, Observer { list ->
+//// TODO: Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
+////                timerDao.deleteTimer(list)
+//                println(list)
+//            })
+//        }
 
-    delete.setOnClickListener{
-            timersViewModel.getTimer.observe(this, Observer { list ->
-// TODO: Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
-//                timerDao.deleteTimer(list)
-                println(list)
-            })
-        }
-
-        add.setOnClickListener {
-//            pauseTimer()
-
-            val intent = Intent()
-            intent.setClassName(this, "com.example.innotime.addTimer.AddTimerActivity")
-            startActivity(intent)
-//            this.finish()
-        }
+//        add.setOnClickListener {
+////            pauseTimer()
+//
+//            val intent = Intent()
+//            intent.setClassName(this, "com.example.innotime.addTimer.AddTimerActivity")
+//            startActivity(intent)
+////            this.finish()
+//        }
 
         list.setOnClickListener {
             val intent = Intent()

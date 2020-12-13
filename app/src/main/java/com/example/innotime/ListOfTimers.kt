@@ -1,14 +1,15 @@
 package com.example.innotime
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.innotime.adapters.TimerInfoItemAdapter
-import com.example.innotime.db.TimerDao
 import com.example.innotime.db.TimerRoomDatabase
 import com.example.innotime.viewmodels.TimersViewModel
+import kotlinx.android.synthetic.main.activity_list_of_timers.*
 import javax.inject.Inject
 
 class ListOfTimers : AppCompatActivity() {
@@ -33,6 +34,21 @@ class ListOfTimers : AppCompatActivity() {
         timersDao.getTimers().observe(this, Observer {timers ->
             adapter.setTimerInfoList(timers)
         })
+
+        create.setOnClickListener {
+//            pauseTimer()
+
+            val intent = Intent()
+            intent.setClassName(this, "com.example.innotime.addTimer.AddTimerActivity")
+            startActivity(intent)
+//            this.finish()
+        }
+
+        importTimer.setOnClickListener{
+            val intent = Intent()
+            intent.setClassName(this, "com.example.innotime.ImportTimer")
+            startActivity(intent)
+        }
 
 //        (application as TimerApplication).appComponent.inject(this)
 //
