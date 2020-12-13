@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 TimerState.Stopped -> {
                     updateFromRunningTimer(reset = true)
+                    startTimer(seconds)
                 }
                 else -> startTimer(secondsRemaining)
             }
@@ -151,6 +152,15 @@ class MainActivity : AppCompatActivity() {
             appContext.currentTimerState!!.reset()
         }
 
+
+        if (appContext.currentTimerState!!.finished){
+            timerState = TimerState.Stopped
+            time.text = "Done!"
+            updateButtons()
+
+            return
+        }
+
         seconds = appContext.currentTimerState!!.remainingTime
         secondsRemaining = seconds
 
@@ -212,6 +222,7 @@ class MainActivity : AppCompatActivity() {
 //                this.finish()
             }
         } else {
+            appContext.currentTimerState!!.finished = true
             timerState = TimerState.Stopped
             time.text = "Done!"
             updateButtons()
