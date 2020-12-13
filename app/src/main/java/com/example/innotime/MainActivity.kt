@@ -44,73 +44,19 @@ class MainActivity : AppCompatActivity() {
         (application as TimerApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
-        // TODO : Remove DB operations
-        val timersDao = TimerRoomDatabase.getTimerDataBase(application).timerDao()
-
-        CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
-            val gson = Gson()
-
-            timersDao.insertTimer(
-                TimerDbModel(
-                    0,
-                    gson.toJson(
-                        SequentialTimerInfo(
-                            "T1",
-                            "T1",
-                            "T1 desc",
-                            arrayOf(SequentialSingleTimerInfo(0, 10, "", "", emptyArray())),
-                            0
-                        )
-                    ).toString()
-                )
-            )
-
-
-            timersDao.insertTimer(
-                TimerDbModel(
-                    1,
-                    gson.toJson(
-                        SequentialTimerInfo(
-                            "T1",
-                            "T1",
-                            "T1 desc",
-                            arrayOf(SequentialSingleTimerInfo(0, 5, "", "", emptyArray())),
-                            0
-                        )
-                    ).toString()
-                )
-            )
-
-
-        }
-
-
-
         setContentView(R.layout.activity_main)
 
-
-//    delete.setOnClickListener{
-//            timersViewModel.getTimer.observe(this, Observer { list ->
-//// TODO: Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
-////                timerDao.deleteTimer(list)
-//                println(list)
-//            })
-//        }
-
-//        add.setOnClickListener {
-////            pauseTimer()
-//
-//            val intent = Intent()
-//            intent.setClassName(this, "com.example.innotime.addTimer.AddTimerActivity")
-//            startActivity(intent)
-////            this.finish()
-//        }
-
         list.setOnClickListener {
+
+            if (timerState == TimerState.Running) {
+                pauseTimer()
+                updateButtons()
+                Toast.makeText(this, "Your active timer has been paused", Toast.LENGTH_SHORT).show()
+            }
+
             val intent = Intent()
             intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
             startActivity(intent)
-//            this.finish()
         }
 
         start.setOnClickListener { v ->
@@ -119,9 +65,7 @@ class MainActivity : AppCompatActivity() {
                     startTimer(seconds)
                 }
                 TimerState.Stopped -> {
-
                     updateFromRunningTimer(reset = true)
-//                    startTimer(seconds)
                 }
                 else -> startTimer(secondsRemaining)
             }
