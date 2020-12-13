@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.innotime.R
 import com.example.innotime.RunningTimerState
 import com.example.innotime.SequentialTimerInfo
+import com.example.innotime.TimerApplication
 import com.example.innotime.api.Client
 import com.example.innotime.db.TimerDao
 import com.example.innotime.db.TimerDbModel
@@ -24,9 +25,9 @@ import retrofit2.Response
 import kotlin.coroutines.EmptyCoroutineContext
 
 class TimerInfoListAdapter(
-        val dao: TimerDao,
-        val application: TimerApplication,
-        val activity: Activity
+    val dao: TimerDao,
+    val application: TimerApplication,
+    val activity: Activity
     ) : RecyclerView.Adapter<TimerInfoListAdapter.TimerInfoViewHolder>() {
     private var listOfTimers = listOf<TimerDbModel>()
 
@@ -73,12 +74,14 @@ class TimerInfoListAdapter(
 
             itemView.timerShareButton.setOnClickListener {
                 val answer = "{\"json\":" + timerItem.data + "}"
+                println(answer)
                 client.timerService.postTimer(answer)
-                        .enqueue(object : Callback<JSONObject> {
-                            override fun onFailure(call: Call<JSONObject>, t: Throwable) {
+                        .enqueue(object : Callback<String> {
+                            override fun onFailure(call: Call<String>, t: Throwable) {
+                                println(t)
                                 Toast.makeText(itemView.context, "Cannot share this timer", Toast.LENGTH_SHORT).show()
                             }
-                            override fun onResponse(call: Call<JSONObject>, response: Response<JSONObject>) {
+                            override fun onResponse(call: Call<String>, response: Response<String>) {
                                 Toast.makeText(itemView.context, response.body().toString(), Toast.LENGTH_SHORT).show()
                             }
                         })

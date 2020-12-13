@@ -12,5 +12,5 @@ interface TimerService {
     fun getTimerByUrl():Call<SequentialTimerInfo>
 
     @POST(".")
-    fun postTimer(@Body json: String): Call<JSONObject>
+    fun postTimer(@Body json: String): Call<String>
 }
