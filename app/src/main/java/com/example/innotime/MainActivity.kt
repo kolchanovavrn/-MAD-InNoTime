@@ -24,7 +24,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
-    enum class TimerState{
+    enum class TimerState {
         Initial,
         Running,
         Paused,
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private var timerState = TimerState.Initial
     private var seconds: Long = 60
     private var secondsRemaining: Long = seconds
-    private var pauseNext: Boolean = true
+    private var pauseNext: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as TimerApplication).appComponent.inject(this)
@@ -46,13 +46,19 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        list.setOnClickListener {
 
+        list.setOnClickListener {
             if (timerState == TimerState.Running) {
                 pauseTimer()
                 updateButtons()
                 Toast.makeText(this, "Your active timer has been paused", Toast.LENGTH_SHORT).show()
             }
+
+            // Saving remaning seconds
+            val appContext = applicationContext as TimerApplication
+            appContext.currentTimerState!!.remainingTime = secondsRemaining
+
+            pauseNext = true
 
             val intent = Intent()
             intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
@@ -82,6 +88,8 @@ class MainActivity : AppCompatActivity() {
             timer.cancel()
             onTimerFinished()
         }
+
+        updateFromRunningTimer()
     }
 
     private fun updateButtons() {
@@ -116,9 +124,19 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        if (timerState == TimerState.Transition || timerState == TimerState.Initial) {
+        if (timerState == TimerState.Transition) {
             updateFromRunningTimer()
+            startTimer(secondsRemaining)
         }
+
+        if (timerState == TimerState.Paused) {
+
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        updateFromRunningTimer()
     }
 
     private fun updateFromRunningTimer(reset: Boolean = false) {
@@ -136,19 +154,17 @@ class MainActivity : AppCompatActivity() {
         seconds = appContext.currentTimerState!!.remainingTime
         secondsRemaining = seconds
 
+        time.text = "$secondsRemaining"
         updateButtons()
-        label.setText(appContext.currentTimerState!!.timer.name + " : " + appContext.currentTimerState!!.getCurrentSingleTimer().name)
 
 
-        if (pauseNext) {
-            time.text = "$secondsRemaining"
-            timerState = TimerState.Paused
-            pauseNext = false
+        if (appContext.currentTimerState!!.timer.timers.size == 1) {
 
+            label.text =
+                appContext.currentTimerState!!.timer.name
         } else {
-            timerState = TimerState.Running
-            startTimer(seconds)
-
+            label.text =
+                appContext.currentTimerState!!.timer.name + " : " + appContext.currentTimerState!!.getCurrentSingleTimer().name
         }
 
 
@@ -156,6 +172,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun pauseTimer() {
         if (timerState == TimerState.Running) {
+
+            val appContext = applicationContext as TimerApplication
+            appContext.currentTimerState!!.remainingTime = secondsRemaining
             timer.cancel()
         }
     }
@@ -174,7 +193,14 @@ class MainActivity : AppCompatActivity() {
 
                 updateFromRunningTimer()
 
-//                startTimer(seconds)
+                if (pauseNext) {
+                    timerState = TimerState.Paused
+                    pauseNext = false
+
+                } else {
+                    timerState = TimerState.Running
+                    startTimer(seconds)
+                }
 
             } else {
                 val intent = Intent()
