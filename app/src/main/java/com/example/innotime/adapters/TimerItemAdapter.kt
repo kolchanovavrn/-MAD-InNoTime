@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.innotime.R
 import com.example.innotime.SequentialTimerInfo
 import com.example.innotime.TimerApplication
+import com.example.innotime.api.Client
 import com.example.innotime.db.TimerDao
 import com.example.innotime.db.TimerDbModel
 import com.example.innotime.db.TimerRoomDatabase
@@ -22,6 +23,7 @@ class TimerInfoItemAdapter(
         val dao: TimerDao
     ) : RecyclerView.Adapter<TimerInfoItemAdapter.TimerInfoViewHolder>() {
     private var listOfTimers = listOf<TimerDbModel>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimerInfoViewHolder {
         return TimerInfoViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.timer_info_item, parent, false), dao
@@ -55,6 +57,8 @@ class TimerInfoItemAdapter(
 
 
             val gson = Gson()
+            val client = Client("http://innotime.herokuapp.com/timers/")
+
             val timer : SequentialTimerInfo = gson.fromJson(timerItem.data, SequentialTimerInfo::class.java)
 
             itemView.timerName.text = timer.name
@@ -69,6 +73,8 @@ class TimerInfoItemAdapter(
             }
 
             itemView.timerShareButton.setOnClickListener{
+//                client.timerService.postTimer(timerItem.data)
+//                println(timerItem.data)
                 // TODO : SHARE
             }
         }

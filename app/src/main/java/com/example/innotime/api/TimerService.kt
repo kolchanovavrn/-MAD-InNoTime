@@ -1,9 +1,15 @@
 package com.example.innotime.api
 
+import com.example.innotime.SequentialTimerInfo
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface TimerService {
     @GET(".")
-    fun getTimerByUrl():Call<Timer>
+    fun getTimerByUrl():Call<SequentialTimerInfo>
+
+    @POST(".")
+    fun postTimer(@Body json: String): Call<String>
 }
