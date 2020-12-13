@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             val appContext = applicationContext as TimerApplication
             appContext.currentTimerState!!.remainingTime = secondsRemaining
 
-            pauseNext = true
+//            pauseNext = true
 
             val intent = Intent()
             intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         start.setOnClickListener { v ->
             when (timerState) {
                 TimerState.Initial -> {
+                    updateFromRunningTimer()
                     startTimer(seconds)
                 }
                 TimerState.Stopped -> {
@@ -128,10 +129,6 @@ class MainActivity : AppCompatActivity() {
         if (timerState == TimerState.Transition) {
             updateFromRunningTimer()
             startTimer(secondsRemaining)
-        }
-
-        if (timerState == TimerState.Paused) {
-
         }
     }
 

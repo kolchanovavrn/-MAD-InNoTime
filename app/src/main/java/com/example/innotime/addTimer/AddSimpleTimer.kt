@@ -59,7 +59,7 @@ class AddSimpleTimer : Fragment() {
                                 uuid,
                                 mSettings?.getString(APP_PREFERENCES_NAME, "") ?: uuid,
                                 mSettings?.getString(APP_PREFERENCES_DESCRIPTION, "") ?: "",
-                                arrayOf(SequentialSingleTimerInfo(0, 10, "", "", emptyArray())),
+                                arrayOf(SequentialSingleTimerInfo(0, duration.toInt(), "", "", emptyArray())),
                                 0
                             )
                         ).toString()
