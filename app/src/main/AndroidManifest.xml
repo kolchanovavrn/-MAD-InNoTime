@@ -2,18 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.innotime">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".TimerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.InNoTime"
-        android:name=".TimerApplication">
+        android:theme="@style/Theme.InNoTime">
+        <service
+            android:name=".CountDownBroadcastService"
+            android:enabled="true"
+            android:exported="true"></service>
 
-        <activity android:name=".ListOfTimers" />
-        <activity android:name=".AddTimer" />
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".ImportTimer"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".TimerActions"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".ListOfTimers"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".addTimer.AddTimerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

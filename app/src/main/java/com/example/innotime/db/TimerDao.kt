@@ -9,6 +9,9 @@ interface TimerDao {
     @Query("SELECT * from timers_table ORDER BY id ASC")
     fun getTimers(): LiveData<List<TimerDbModel>>
 
+    @Query("Select * from timers_table WHERE id = :id")
+    fun getTimer(id: Int): LiveData<TimerDbModel>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertTimer(timerDbModel: TimerDbModel)
 

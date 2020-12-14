@@ -5,12 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.coroutines.EmptyCoroutineContext
 
-@Database(entities = [TimerDbModel::class], version = 2)
+@Database(entities = [TimerDbModel::class], version = 3)
 abstract class TimerRoomDatabase : RoomDatabase() {
 
     abstract fun timerDao(): TimerDao
@@ -22,13 +18,13 @@ abstract class TimerRoomDatabase : RoomDatabase() {
         fun getTimerDataBase(context: Context): TimerRoomDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        TimerRoomDatabase::class.java,
-                        "timers"
+                    context.applicationContext,
+                    TimerRoomDatabase::class.java,
+                    "timers"
                 )
-                        .fallbackToDestructiveMigration()
-                        .addCallback(TimerDatabaseCallback())
-                        .build()
+                    .fallbackToDestructiveMigration()
+                    .addCallback(TimerDatabaseCallback())
+                    .build()
                 INSTANCE = instance
                 instance
             }
@@ -39,11 +35,6 @@ abstract class TimerRoomDatabase : RoomDatabase() {
     ) : RoomDatabase.Callback() {
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
-//                INSTANCE?.let { database ->
-//                    CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
-//                        populateDatabase(database.timerDao())
-//                    }
-//                }
         }
     }
 
