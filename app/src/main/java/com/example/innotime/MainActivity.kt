@@ -160,10 +160,11 @@ class MainActivity : AppCompatActivity() {
         progress.progress = (
                 seconds - secondsRemaining).toInt()
 
-        time.text = "$secondsRemaining"
+        val timerSeconds = secondsRemaining % 60
+        val timerMinutes = (secondsRemaining % 3600) / 60
+        val timerHours = secondsRemaining / 3600
+        time.text = "$timerHours:$timerMinutes:$timerSeconds"
         updateButtons()
-
-
 
     }
 
@@ -225,6 +226,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFinish() = onTimerFinished()
 
             override fun onTick(millisUntilFinished: Long) {
+                secondsRemaining = millisUntilFinished / 1000
                 val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) % 24
                 val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60
                 val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
