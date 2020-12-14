@@ -194,6 +194,7 @@ class MainActivity : AppCompatActivity() {
     private fun pauseTimer() {
         if (timerState == TimerState.Running) {
 
+            timerState = TimerState.Paused
             val appContext = applicationContext as TimerApplication
             appContext.currentTimerState!!.remainingTime = secondsRemaining
             timer.cancel()
