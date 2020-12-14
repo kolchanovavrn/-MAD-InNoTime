@@ -17,11 +17,17 @@
             android:enabled="true"
             android:exported="true"></service>
 
-        <activity android:name=".ImportTimer" />
-        <activity android:name=".TimerActions" />
-        <activity android:name=".ListOfTimers" />
-        <activity android:name=".addTimer.AddTimerActivity" />
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".ImportTimer"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".TimerActions"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".ListOfTimers"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".addTimer.AddTimerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
