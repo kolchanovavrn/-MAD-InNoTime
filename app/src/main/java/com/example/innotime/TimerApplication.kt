@@ -1,12 +1,10 @@
 package com.example.innotime
 
 import android.app.Application
-import android.util.Log
 import com.google.gson.Gson
 
 class TimerApplication : Application() {
 
-    val appComponent = DaggerApplicationComponent.create()
     var currentTimerState: RunningTimerState? = RunningTimerState(getTestTimer());
 
     override fun onCreate() {
@@ -99,8 +97,6 @@ fun getTestTimer() : SequentialTimerInfo {
     val res : SequentialTimerInfo = gson.fromJson(code, SequentialTimerInfo::class.java)
     res.validate()
 
-    Log.e("DBG", res.toString())
-    Log.e("DBG", res.validate().toString())
 
     return res
 }

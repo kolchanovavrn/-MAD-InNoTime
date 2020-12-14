@@ -1,8 +1,6 @@
 package com.example.innotime
 
-import android.util.Log
 import com.google.gson.annotations.SerializedName
-
 
 class SequentialTimerTransitionInfo(
     @SerializedName("to") val to: Int,
@@ -41,8 +39,6 @@ class SequentialTimerInfo(
         }
         timers.forEach {
             val transitionsIds = HashSet<Int>();
-//            Log.e("DBG", it.transitions.toString())
-//            println(it.transitions.toString())
             it.transitions.forEach {
 
                 if (!timersIds.contains(it.to)) {
@@ -72,10 +68,10 @@ class RunningTimerState(
         timer,
         timer.startingTimer,
         timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong(),
-        finished=false
+        finished = false
     )
 
-    fun reset(){
+    fun reset() {
         currentTimerID = timer.startingTimer
         remainingTime = timer.getSingleTimer(timer.startingTimer)!!.durationInSecs.toLong()
         finished = false
@@ -86,23 +82,9 @@ class RunningTimerState(
         return singleTimer?.transitions ?: emptyArray()
     }
 
-    fun getCurrentSingleTimer() : SequentialSingleTimerInfo{
+    fun getCurrentSingleTimer(): SequentialSingleTimerInfo {
         return timer.getSingleTimer(currentTimerID)!!
     }
-
-//    fun getEndTransition(): SequentialTimerTransitionInfo? {
-//        val singleTimer = timer.getSingleTimer(currentTimerID)!!
-//
-//        if (singleTimer.endTransition == null)
-//            return null
-//        else {
-//            getTransitions().forEach{
-//                if (it.transitionID == singleTimer.endTransition)
-//                    return it
-//            }
-//        }
-//        return null
-//    }
 
     fun makeTransition(transition: SequentialTimerTransitionInfo) {
         currentTimerID = transition.to

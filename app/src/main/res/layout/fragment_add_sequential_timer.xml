@@ -34,7 +34,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/zero"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/sequential_sub_timer" />
@@ -43,21 +43,22 @@
         android:id="@+id/newSubTimerNameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/name"></EditText>
+        android:hint="@string/name" />
 
     <EditText
         android:id="@+id/newSubTimerDurationField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/time"
-        android:inputType="number"></EditText>
+        android:inputType="number" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addNewSubTimerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Add subtimer"></com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+        android:text="@string/add_subtimer"
+        />
 
 
 </LinearLayout>

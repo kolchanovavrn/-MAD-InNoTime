@@ -6,12 +6,9 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.innotime.viewmodels.TimersViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-
     enum class TimerState {
         Initial,
         Running,
@@ -20,8 +17,6 @@ class MainActivity : AppCompatActivity() {
         Transition
     }
 
-    @Inject
-    lateinit var timersViewModel: TimersViewModel
     private lateinit var timer: CountDownTimer
     private var timerState = TimerState.Initial
     private var seconds: Long = 60
@@ -29,24 +24,20 @@ class MainActivity : AppCompatActivity() {
     private var pauseNext: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as TimerApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-
 
         list.setOnClickListener {
             if (timerState == TimerState.Running) {
                 pauseTimer()
                 updateButtons()
-                Toast.makeText(this, "Your active timer has been paused", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.pause_active, Toast.LENGTH_SHORT).show()
             }
 
             // Saving remaning seconds
             val appContext = applicationContext as TimerApplication
             appContext.currentTimerState!!.remainingTime = secondsRemaining
-
-//            pauseNext = true
 
             val intent = Intent()
             intent.setClassName(this@MainActivity, "com.example.innotime.ListOfTimers")
@@ -129,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         val appContext = applicationContext as TimerApplication
 
         if (appContext.currentTimerState == null) {
-            Toast.makeText(applicationContext, "No timer was set!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, R.string.no_timer, Toast.LENGTH_SHORT).show()
             finish()
         }
 
@@ -138,9 +129,9 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        if (appContext.currentTimerState!!.finished){
+        if (appContext.currentTimerState!!.finished) {
             timerState = TimerState.Stopped
-            time.text = "Done!"
+            time.text = R.string.done.toString()
             updateButtons()
 
             return
@@ -203,13 +194,11 @@ class MainActivity : AppCompatActivity() {
                 timerState = TimerState.Transition
 
                 startActivity(intent)
-
-//                this.finish()
             }
         } else {
             appContext.currentTimerState!!.finished = true
             timerState = TimerState.Stopped
-            time.text = "Done!"
+            time.text = R.string.done.toString()
             updateButtons()
         }
     }

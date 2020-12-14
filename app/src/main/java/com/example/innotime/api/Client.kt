@@ -1,10 +1,6 @@
 package com.example.innotime.api
 
-import com.example.innotime.BuildConfig
-import okhttp3.HttpUrl
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -22,7 +18,6 @@ class Client(url: String) {
         addConverterFactory(ScalarsConverterFactory.create())
         addConverterFactory(GsonConverterFactory.create())
     }.build()
-
 
     var timerService: TimerService
 
