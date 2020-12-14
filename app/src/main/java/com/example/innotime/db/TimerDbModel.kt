@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "timers_table")
-data class TimerDbModel (
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name="id") val id: Int,
+data class TimerDbModel(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "data") val data: String
-): Parcelable
+) : Parcelable

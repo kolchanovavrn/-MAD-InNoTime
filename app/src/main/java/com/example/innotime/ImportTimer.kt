@@ -35,36 +35,49 @@ class ImportTimer : AppCompatActivity() {
             client.timerService.getTimerByUrl()
                 .enqueue(object : Callback<SequentialTimerInfo> {
                     override fun onFailure(call: Call<SequentialTimerInfo>, t: Throwable) {
-                        Toast.makeText(this@ImportTimer, "Error!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ImportTimer, R.string.url_error, Toast.LENGTH_SHORT)
+                            .show()
                     }
 
-                    override fun onResponse(call: Call<SequentialTimerInfo>, response: Response<SequentialTimerInfo>) {
+                    override fun onResponse(
+                        call: Call<SequentialTimerInfo>,
+                        response: Response<SequentialTimerInfo>
+                    ) {
                         if (response.body() === null) {
                             Toast.makeText(
                                 this@ImportTimer,
-                                "No such timer",
+                                R.string.url_error,
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             try {
-                                if (response.body()!!.validate()){
+                                if (response.body()!!.validate()) {
                                     val gson = Gson()
                                     val newDbModel = TimerDbModel(
                                         0,
-                                        gson.toJson(response.body(), SequentialTimerInfo::class.java).toString())
+                                        gson.toJson(
+                                            response.body(),
+                                            SequentialTimerInfo::class.java
+                                        ).toString()
+                                    )
                                     CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
                                         timersDao.insertTimer(newDbModel)
                                         this@ImportTimer.finish()
                                     }
+                                } else {
+                                    Toast.makeText(
+                                        this@ImportTimer,
+                                        R.string.url_error,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
-                                else{
-                                    Toast.makeText(this@ImportTimer, "Error!", Toast.LENGTH_SHORT).show()
-                                }
+                            } catch (ex: Exception) {
+                                Toast.makeText(
+                                    this@ImportTimer,
+                                    R.string.url_error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            catch (ex: Exception) {
-                                Toast.makeText(this@ImportTimer, "Error!", Toast.LENGTH_SHORT).show()
-                            }
-
                         }
                     }
                 })

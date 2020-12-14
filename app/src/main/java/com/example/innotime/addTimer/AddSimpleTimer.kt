@@ -37,15 +37,10 @@ class AddSimpleTimer : Fragment() {
         back.setOnClickListener { goToMainPage() }
 
         create.setOnClickListener {
-//            Toast.makeText(activity, "Need to save somewhere", Toast.LENGTH_LONG).show()
-
-//            GET NAME && DESCRIPTION
-//            mSettings?.getString(APP_PREFERENCES_NAME, "")
-//            mSettings?.getString(APP_PREFERENCES_DESCRIPTION, "")
-
             try {
 
-                val timersDao = TimerRoomDatabase.getTimerDataBase(activity!!.application).timerDao()
+                val timersDao =
+                    TimerRoomDatabase.getTimerDataBase(activity!!.application).timerDao()
 
                 val uuid = UUID.randomUUID().toString()
                 val duration = time.text.toString().toLong()
@@ -59,24 +54,27 @@ class AddSimpleTimer : Fragment() {
                                 uuid,
                                 mSettings?.getString(APP_PREFERENCES_NAME, "") ?: uuid,
                                 mSettings?.getString(APP_PREFERENCES_DESCRIPTION, "") ?: "",
-                                arrayOf(SequentialSingleTimerInfo(0, duration.toInt(), "", "", emptyArray())),
+                                arrayOf(
+                                    SequentialSingleTimerInfo(
+                                        0,
+                                        duration.toInt(),
+                                        "",
+                                        "",
+                                        emptyArray()
+                                    )
+                                ),
                                 0
                             )
                         ).toString()
                     )
-
-
                 CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
                     timersDao.insertTimer(newDbModel)
                     activity?.finish()
                 }
-
             } catch (ex: NumberFormatException) {
-                Toast.makeText(this.activity, "Incorrect duration!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.activity, R.string.duration_error, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-
         }
     }
 

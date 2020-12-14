@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="padding">10dp</dimen>
     <dimen name="big_padding">16dp</dimen>
     <dimen name="button_padding">20dp</dimen>
+    <dimen name="progress_bar">300dp</dimen>
 
+    <dimen name="text_size">70sp</dimen>
 
 </resources>

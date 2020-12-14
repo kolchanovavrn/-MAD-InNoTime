@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.innotime.R
 import com.example.innotime.SequentialSingleTimerInfo
@@ -80,14 +79,11 @@ class AddSequentialTimer : Fragment() {
 
             val timerJsonString = gson.toJson(newTimer).toString()
 
-
             CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
                 timersDao.insertTimer(TimerDbModel(0, timerJsonString))
             }
-
             activity?.finish()
         }
-
 
         addNewSubTimerButton.setOnClickListener {
             try {
@@ -101,10 +97,9 @@ class AddSequentialTimer : Fragment() {
                     )
                 )
             } catch (ex: NumberFormatException) {
-                Toast.makeText(this.activity, "Incorrect duration!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.activity, R.string.duration_error, Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     private fun goToMainPage() {

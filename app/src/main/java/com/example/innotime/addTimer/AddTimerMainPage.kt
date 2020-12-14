@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SwitchCompat
 import com.example.innotime.R
 import kotlinx.android.synthetic.main.fragment_add_timer_main_page.*
 
 class AddTimerMainPage : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_add_timer_main_page, container, false)
     }
 
@@ -24,7 +25,8 @@ class AddTimerMainPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         back.setOnClickListener {
-            (requireActivity() as AddTimerActivity).finish() }
+            (requireActivity() as AddTimerActivity).finish()
+        }
 
         nextStep.setOnClickListener {
 
@@ -37,11 +39,9 @@ class AddTimerMainPage : Fragment() {
                 editor.putString(APP_PREFERENCES_DESCRIPTION, description.text.toString())
                 editor.apply()
 
-                if (type.isChecked){
+                if (type.isChecked) {
                     addSequentialTimer()
-                }
-                else
-                {
+                } else {
                     addSimpleTimer()
                 }
             }
