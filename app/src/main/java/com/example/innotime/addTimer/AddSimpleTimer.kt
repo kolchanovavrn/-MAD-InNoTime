@@ -80,12 +80,11 @@ class AddSimpleTimer : Fragment() {
 
         create.setOnClickListener {
             val arr = time.text.toString().split(':')
-            val durationInSec = arr[0].toInt() * 60 * 60 + arr[1].toInt() * 60 + arr[2].toInt()
             if (arr.size != 3) {
                 Toast.makeText(this.activity, R.string.duration_error, Toast.LENGTH_SHORT).show()
-
             } else {
-                // TODO: Add parser of HHMMSS TO SS
+                val durationInSec = arr[0].toInt() * 60 * 60 + arr[1].toInt() * 60 + arr[2].toInt()
+
                 try {
 
                     val timersDao =
