@@ -105,9 +105,11 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        updateFromRunningTimer()
+
         if (timerState == TimerState.Transition) {
-            updateFromRunningTimer()
             startTimer(secondsRemaining)
+            updateButtons()
         }
     }
 
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity() {
 
         if (appContext.currentTimerState!!.finished) {
             timerState = TimerState.Stopped
-            time.text = R.string.done.toString()
+            time.text = resources.getString(R.string.done)
             progress.progress = 0
             updateButtons()
 
@@ -212,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         timerState = TimerState.Running
 
         progress.max = seconds.toInt()
-        progress.progress = 0
+        progress.progress = (seconds.toInt() - secondsRemaining.toInt())
 
         timer = object : CountDownTimer(sec * 1000, 1000) {
             override fun onFinish() = onTimerFinished()
