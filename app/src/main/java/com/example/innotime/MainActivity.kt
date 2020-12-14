@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
+        // Service for background timers
+
+
+
         list.setOnClickListener {
             if (timerState == TimerState.Running) {
                 pauseTimer()
@@ -204,7 +208,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             appContext.currentTimerState!!.finished = true
             timerState = TimerState.Stopped
-            time.text = R.string.done.toString()
+            time.text = resources.getString(R.string.done)
             updateButtons()
         }
     }

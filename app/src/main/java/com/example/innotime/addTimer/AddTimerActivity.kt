@@ -48,4 +48,17 @@ class AddTimerActivity : FragmentActivity() {
             commit()
         }
     }
+
+    override fun onBackPressed() {
+
+        val count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 1) {
+            // Workaround :)
+            getSupportFragmentManager().popBackStack();
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+    }
 }
