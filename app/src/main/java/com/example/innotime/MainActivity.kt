@@ -1,13 +1,22 @@
 package com.example.innotime
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
+
+val NOTIFICATIONS_CHANNEL = "timer_channel_0"
 
 class MainActivity : AppCompatActivity() {
     enum class TimerState {
@@ -30,6 +39,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Service for background timers
+        // TODO
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = NOTIFICATIONS_CHANNEL
+            val descriptionText = NOTIFICATIONS_CHANNEL
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(NOTIFICATIONS_CHANNEL, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
 
 
 
@@ -184,7 +207,13 @@ class MainActivity : AppCompatActivity() {
 
         val appContext = applicationContext as TimerApplication
 
-        if (appContext.currentTimerState!!.getTransitions().size != 0) {
+        val notification = NotificationCompat.Builder(applicationContext, NOTIFICATION_SERVICE)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setContentTitle("Timer ${appContext.currentTimerState!!.getCurrentSingleTimer().name} has finished")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setChannelId(NOTIFICATIONS_CHANNEL)
+
+                if (appContext.currentTimerState!!.getTransitions().size != 0) {
             if (appContext.currentTimerState!!.getTransitions().size == 1 && appContext.currentTimerState!!.getTransitions()[0].type == 1) {
                 val endTransition = appContext.currentTimerState!!.getTransitions()[0]
                 appContext.currentTimerState!!.makeTransition(endTransition)
@@ -200,19 +229,56 @@ class MainActivity : AppCompatActivity() {
                     startTimer(seconds)
                 }
 
+                notification.setContentText("Switched to ${appContext.currentTimerState!!.getCurrentSingleTimer().name}")
+                val notificationIntent = Intent(MainActivity::class.java.toString()).apply {
+//                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+
+                notification.setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
+
             } else {
                 val intent = Intent()
                 intent.setClassName(this@MainActivity, "com.example.innotime.TimerActions")
                 timerState = TimerState.Transition
 
                 startActivity(intent)
+
+                val notificationIntent = Intent("com.example.innotime.TimerActions").apply {
+//                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+                notification.setContentText("Action required!")
+                    .setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
+
             }
         } else {
             appContext.currentTimerState!!.finished = true
             timerState = TimerState.Stopped
             time.text = resources.getString(R.string.done)
             updateButtons()
+
+            val notificationIntent = Intent(MainActivity::class.java.toString()).apply {
+//                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+
+            notification.setContentIntent(PendingIntent.getActivity(this, 0, notificationIntent, 0))
         }
+
+
+
+        notification.setAutoCancel(true)
+        with(NotificationManagerCompat.from(this)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(0, notification.build())
+        }
+
+//        val mNotificationManager =
+//            application.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//
+//        mNotificationManager.notify(0, notification.build())
+
     }
 
     private fun startTimer(sec: Long) {
@@ -227,6 +293,9 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTick(millisUntilFinished: Long) {
                 secondsRemaining = millisUntilFinished / 1000
+                val appContext = applicationContext as TimerApplication
+                appContext.currentTimerState!!.remainingTime = secondsRemaining
+
                 val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) % 24
                 val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60
                 val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
