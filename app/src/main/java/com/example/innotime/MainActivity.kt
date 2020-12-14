@@ -137,30 +137,34 @@ class MainActivity : AppCompatActivity() {
             appContext.currentTimerState!!.reset()
         }
 
-
-        if (appContext.currentTimerState!!.finished){
-            timerState = TimerState.Stopped
-            time.text = "Done!"
-            updateButtons()
-
-            return
-        }
-
-        seconds = appContext.currentTimerState!!.remainingTime
-        secondsRemaining = seconds
-
-        time.text = "$secondsRemaining"
-        updateButtons()
-
-
         if (appContext.currentTimerState!!.timer.timers.size == 1) {
-
             label.text =
                 appContext.currentTimerState!!.timer.name
         } else {
             label.text =
                 appContext.currentTimerState!!.timer.name + " : " + appContext.currentTimerState!!.getCurrentSingleTimer().name
         }
+
+
+        if (appContext.currentTimerState!!.finished){
+            timerState = TimerState.Stopped
+            time.text = "Done!"
+            progress.progress = 0
+            updateButtons()
+
+            return
+        }
+
+        seconds = appContext.currentTimerState!!.getCurrentSingleTimer().durationInSecs.toLong()
+        secondsRemaining = appContext.currentTimerState!!.remainingTime
+
+        progress.max = seconds.toInt()
+        progress.progress = (
+                seconds - secondsRemaining).toInt()
+
+        time.text = "$secondsRemaining"
+        updateButtons()
+
 
 
     }
@@ -218,12 +222,17 @@ class MainActivity : AppCompatActivity() {
 
         timerState = TimerState.Running
 
+        progress.max = seconds.toInt()
+        progress.progress = 0
+
         timer = object : CountDownTimer(sec * 1000, 1000) {
             override fun onFinish() = onTimerFinished()
 
             override fun onTick(millisUntilFinished: Long) {
                 secondsRemaining = millisUntilFinished / 1000
                 time.text = "$secondsRemaining"
+
+                progress.incrementProgressBy(1)
             }
         }.start()
     }

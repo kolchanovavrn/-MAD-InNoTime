@@ -20,7 +20,7 @@ class TimerApplication : Application() {
 }
 
 fun getTestTimer() : SequentialTimerInfo {
-    val code = """
+    var code = """
             {
                 "id" : "TestTimer",
                 "name" : "Wow, it works!",
@@ -65,6 +65,66 @@ fun getTestTimer() : SequentialTimerInfo {
                             "to" : 3,
                             "type" : 0,
                             "buttonText" : "Skip next"
+                            }
+                        ]
+                    },
+                    {
+                        "id" : 2,
+                        "name" : "third",
+                        "durationInSecs" : 10,
+                        "description" : "1010",
+                        "transitions" : [
+                            {
+                            "to" : 3,
+                            "type" : 0,
+                            "buttonText" : "Go?"
+                            }
+                        ]
+                    },
+                    {
+                        "id" : 3,
+                        "name" : "fourth (last)",
+                        "durationInSecs" : 5,
+                        "description" : "The last one",
+                        "transitions" : []
+                    }
+                ]
+            }
+            
+            
+             
+    """.trimIndent()
+
+    code = """
+            {
+                "id" : "TestTimer2",
+                "name" : "Wow, it works (2)!",
+                "desc" : "No one will read this",
+                "startingTimer" : 0,
+                "timers" : [
+                    {
+                        "id" : 0,
+                        "name" : "first",
+                        "durationInSecs" : 5,
+                        "description" : "555",
+                        "transitions" : [
+                            {
+                            "to" : 1,
+                            "type" : 0,
+                            "buttonText" : "This one should be invisible"
+                            }
+                        ]
+                    },
+                    {
+                        "id" : 1,
+                        "name" : "second",
+                        "durationInSecs" : 7,
+                        "description" : "777",
+                        "transitions" : [
+                            {
+                            "to" : 2,
+                            "type" : 0,
+                            "buttonText" : "Go to next"
                             }
                         ]
                     },
