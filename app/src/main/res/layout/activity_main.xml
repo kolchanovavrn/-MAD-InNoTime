@@ -10,8 +10,11 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="@dimen/max_text_size"
+        android:autoSizeStepGranularity="@dimen/granularity"
         android:text="@string/time"
-        android:textSize="@dimen/text_size"
+        android:textSize="@dimen/max_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -22,12 +25,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/time"
+        app:layout_constraintEnd_toStartOf="@+id/start"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progress"
-        app:srcCompat="@drawable/ic_pause"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_pause" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/start"
@@ -46,26 +49,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/time"
+        app:layout_constraintStart_toEndOf="@+id/start"
         app:layout_constraintTop_toBottomOf="@+id/progress"
-        app:srcCompat="@drawable/ic_stop"
-        android:focusable="true" />
+        app:srcCompat="@drawable/ic_stop" />
 
     <ProgressBar
         android:id="@+id/progress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:progress="25"
-        android:minWidth="@dimen/progress_bar"
-        android:minHeight="@dimen/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
+        android:minWidth="@dimen/progress_bar"
+        android:progress="25"
+        app:layout_constraintEnd_toEndOf="@+id/stop"
+        app:layout_constraintStart_toStartOf="@+id/pause"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -73,9 +73,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_format_list_bulleted_24"
-        app:layout_constraintBottom_toTopOf="@+id/progress"
-        app:layout_constraintEnd_toStartOf="@+id/time"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/label"
+        app:layout_constraintEnd_toEndOf="@+id/pause"
+        app:layout_constraintStart_toStartOf="@+id/pause"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -84,8 +84,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
-        app:layout_constraintBottom_toTopOf="@+id/progress"
+        app:layout_constraintBottom_toTopOf="@+id/time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

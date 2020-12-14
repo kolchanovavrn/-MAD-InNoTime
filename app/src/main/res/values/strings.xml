@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">InNoTime</string>
 
-    <string name="time">60</string>
+    <string name="time">23:59:59</string>
 
 <!--    Actions-->
     <string name="create">Create</string>
