@@ -1,6 +1,8 @@
 package com.example.innotime.addTimer
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,8 +47,46 @@ class AddSequentialTimer : Fragment() {
 
         cancel.setOnClickListener { goToMainPage() }
 
+        newSubTimerDurationField.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                var working = s.toString()
+                if (working.length == 2 && before === 0) {
+                    if (working.toInt() > 23 || working.toInt() < 0) {
+                        newSubTimerDurationField.setError("Enter a valid date: HH:MM:SS")
+                    } else {
+                        working += ":"
+                        newSubTimerDurationField.setText(working)
+                        newSubTimerDurationField.setSelection(working.length)
+                    }
+                } else if (working.length == 5 && before === 0) {
+                    val minutes = working.substring(3, 5)
+                    if (minutes.toInt() > 59) {
+                        newSubTimerDurationField.setError("Enter a valid date: HH:MM:SS")
+                    } else {
+                        working += ":"
+                        newSubTimerDurationField.setText(working)
+                        newSubTimerDurationField.setSelection(working.length)
+                    }
+                } else if (working.length == 8 && before === 0) {
+                    val seconds = working.substring(6, 8)
+                    if (seconds.toInt() > 59) {
+                        newSubTimerDurationField.setError("Enter a valid date: HH:MM:SS")
+                    } else {
+                        addNewSubTimerButton.isEnabled = true
+                    }
+                } else {
+                    addNewSubTimerButton.isEnabled = false
+                }
+            }
+        })
+
         create.setOnClickListener {
-            println(adapter.listOfSubTimers.toString())
             val timersDao = TimerRoomDatabase.getTimerDataBase(activity!!.application).timerDao()
 
             val uuid = UUID.randomUUID().toString()
@@ -86,18 +126,25 @@ class AddSequentialTimer : Fragment() {
         }
 
         addNewSubTimerButton.setOnClickListener {
-            try {
-                val subTimerName = newSubTimerNameField.text.toString()
-                val subTimerDuration = newSubTimerDurationField.text.toString().toLong()
-
-                adapter.addNewSubTimer(
-                    SubTimersAdapter.SubTimerData(
-                        subTimerName,
-                        subTimerDuration
-                    )
-                )
-            } catch (ex: NumberFormatException) {
+            val arr = newSubTimerDurationField.text.toString().split(':')
+            val durationInSec = arr[0].toInt() * 60 * 60 + arr[1].toInt() * 60 + arr[2].toInt()
+            if (arr.size != 3) {
                 Toast.makeText(this.activity, R.string.duration_error, Toast.LENGTH_SHORT).show()
+            } else {
+                try {
+                    val subTimerName = newSubTimerNameField.text.toString()
+                    val subTimerDuration = durationInSec.toLong()
+
+                    adapter.addNewSubTimer(
+                        SubTimersAdapter.SubTimerData(
+                            subTimerName,
+                            subTimerDuration
+                        )
+                    )
+                } catch (ex: NumberFormatException) {
+                    Toast.makeText(this.activity, R.string.duration_error, Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
     }

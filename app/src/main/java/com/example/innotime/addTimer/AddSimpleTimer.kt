@@ -48,43 +48,34 @@ class AddSimpleTimer : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 var working = s.toString()
-                var isValid = true
                 if (working.length == 2 && before === 0) {
                     if (working.toInt() > 23 || working.toInt() < 0) {
-                        isValid = false
+                        time.setError("Enter a valid date: HH:MM:SS")
                     } else {
                         working += ":"
                         time.setText(working)
                         time.setSelection(working.length)
                     }
-                }
-                if (working.length == 5 && before === 0) {
-                    val minutes = working.substring(3, 4)
+                } else if (working.length == 5 && before === 0) {
+                    val minutes = working.substring(3, 5)
                     if (minutes.toInt() > 59) {
-                        isValid = false
+                        time.setError("Enter a valid date: HH:MM:SS")
                     } else {
                         working += ":"
                         time.setText(working)
                         time.setSelection(working.length)
                     }
-                }
-                if (working.length == 8 && before === 0) {
-                    val minutes = working.substring(7, 8)
-                    if (minutes.toInt() > 59) {
-                        isValid = false
+                } else if (working.length == 8 && before === 0) {
+                    val seconds = working.substring(6, 8)
+                    if (seconds.toInt() > 59) {
+                        time.setError("Enter a valid date: HH:MM:SS")
+                    } else {
+                        create.isEnabled = true
                     }
-                } else if (working.length != 8) {
-                    isValid = false
-                }
-
-                if (!isValid) {
-                    time.setError("Enter a valid date: HH:MM:SS")
                 } else {
-                    time.setError(null)
+                    create.isEnabled = false
                 }
-
             }
-
         })
 
         create.setOnClickListener {
