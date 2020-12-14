@@ -31,56 +31,62 @@ class ImportTimer : AppCompatActivity() {
         create.setOnClickListener {
             val timersDao = TimerRoomDatabase.getTimerDataBase(this.application).timerDao()
             val url = url.text.toString()
-            client = Client(url)
-            client.timerService.getTimerByUrl()
-                .enqueue(object : Callback<SequentialTimerInfo> {
-                    override fun onFailure(call: Call<SequentialTimerInfo>, t: Throwable) {
-                        Toast.makeText(this@ImportTimer, R.string.url_error, Toast.LENGTH_SHORT)
-                            .show()
-                    }
+            if (url.last() != '/') {
+                Toast.makeText(this@ImportTimer, R.string.url_error, Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else {
+                client = Client(url)
+                client.timerService.getTimerByUrl()
+                    .enqueue(object : Callback<SequentialTimerInfo> {
+                        override fun onFailure(call: Call<SequentialTimerInfo>, t: Throwable) {
+                            Toast.makeText(this@ImportTimer, R.string.url_error, Toast.LENGTH_SHORT)
+                                .show()
+                        }
 
-                    override fun onResponse(
-                        call: Call<SequentialTimerInfo>,
-                        response: Response<SequentialTimerInfo>
-                    ) {
-                        if (response.body() === null) {
-                            Toast.makeText(
-                                this@ImportTimer,
-                                R.string.url_error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            try {
-                                if (response.body()!!.validate()) {
-                                    val gson = Gson()
-                                    val newDbModel = TimerDbModel(
-                                        0,
-                                        gson.toJson(
-                                            response.body(),
-                                            SequentialTimerInfo::class.java
-                                        ).toString()
-                                    )
-                                    CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
-                                        timersDao.insertTimer(newDbModel)
-                                        this@ImportTimer.finish()
+                        override fun onResponse(
+                            call: Call<SequentialTimerInfo>,
+                            response: Response<SequentialTimerInfo>
+                        ) {
+                            if (response.body() === null) {
+                                Toast.makeText(
+                                    this@ImportTimer,
+                                    R.string.url_error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                try {
+                                    if (response.body()!!.validate()) {
+                                        val gson = Gson()
+                                        val newDbModel = TimerDbModel(
+                                            0,
+                                            gson.toJson(
+                                                response.body(),
+                                                SequentialTimerInfo::class.java
+                                            ).toString()
+                                        )
+                                        CoroutineScope(EmptyCoroutineContext).launch(Dispatchers.IO) {
+                                            timersDao.insertTimer(newDbModel)
+                                            this@ImportTimer.finish()
+                                        }
+                                    } else {
+                                        Toast.makeText(
+                                            this@ImportTimer,
+                                            R.string.url_error,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                } else {
+                                } catch (ex: Exception) {
                                     Toast.makeText(
                                         this@ImportTimer,
                                         R.string.url_error,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                            } catch (ex: Exception) {
-                                Toast.makeText(
-                                    this@ImportTimer,
-                                    R.string.url_error,
-                                    Toast.LENGTH_SHORT
-                                ).show()
                             }
                         }
-                    }
-                })
+                    })
+            }
         }
     }
 }
