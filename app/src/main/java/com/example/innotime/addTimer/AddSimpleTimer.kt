@@ -37,6 +37,8 @@ class AddSimpleTimer : Fragment() {
         back.setOnClickListener { goToMainPage() }
 
         create.setOnClickListener {
+            println(time.text.toString().split(':'))
+            // TODO: Add parser of HHMMSS TO SS
             try {
 
                 val timersDao =

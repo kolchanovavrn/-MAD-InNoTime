@@ -7,6 +7,7 @@ import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     enum class TimerState {
@@ -220,8 +221,10 @@ class MainActivity : AppCompatActivity() {
             override fun onFinish() = onTimerFinished()
 
             override fun onTick(millisUntilFinished: Long) {
-                secondsRemaining = millisUntilFinished / 1000
-                time.text = "$secondsRemaining"
+                val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished) % 24
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60
+                val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
+                time.text = "$hours:$minutes:$seconds"
 
                 progress.incrementProgressBy(1)
             }
