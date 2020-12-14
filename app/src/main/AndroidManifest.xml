@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.innotime">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,6 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InNoTime">
+        <service
+            android:name=".CountDownBroadcastService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+
         <activity android:name=".ImportTimer"
             android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity android:name=".TimerActions"
